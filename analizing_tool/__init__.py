@@ -1,7 +1,8 @@
 import csv
 
 import matplotlib.pyplot as plt
-import numpy as np
+
+import analizing_tool.random_time_series as rts
 
 
 def conv(x):
@@ -23,4 +24,13 @@ def fun():
     plt.ylabel('y')
     plt.title('Interesting Graph')
     plt.legend()
+    plt.show()
+
+
+def gen_rand():
+    data_points = 100
+    change_points = 5
+    snr = 30
+    data, _ = rts.gen_rand(data_points, change_points, snr)
+    plt.plot(data)
     plt.show()
