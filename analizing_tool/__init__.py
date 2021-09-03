@@ -1,12 +1,9 @@
 import csv
 
 import matplotlib.pyplot as plt
+import ruptures as rpt
 
-import analizing_tool.random_time_series as rts
-
-
-def conv(x):
-    return x.replace(',', '.').encode()
+from .random_time_series import gen_rand
 
 
 def fun():
@@ -27,10 +24,12 @@ def fun():
     plt.show()
 
 
-def gen_rand():
-    data_points = 100
-    change_points = 5
-    snr = 30
-    data, _ = rts.gen_rand(data_points, change_points, snr)
-    plt.plot(data)
+def ruptures():
+    data_points, n_breakpoints, snr = 100, 5, 30
+    data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
+
+    algo = rpt.Pelt(model="rbf").fit(data)
+    result = algo.predict(pen=10)
+
+    rpt.display(data, breakpoints, result)
     plt.show()

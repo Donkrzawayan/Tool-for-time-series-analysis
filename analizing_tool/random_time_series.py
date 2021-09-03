@@ -2,7 +2,12 @@ import numpy as np
 
 
 def gen_rand(n_data_points, n_change_points, snr, repeat=1):
-    """Generates random time series, distorted by white noise, which is based on randomly generated change points"""
+    """Generates random time series, distorted by white noise, which is based on randomly generated change points
+
+    Returns:
+        result: array.
+        change_points: list of change point indexes.
+    """
     offset = 10
     cp_range = range(offset, n_data_points - offset)
     change_points = np.sort(np.random.choice(cp_range, n_change_points, replace=False))
