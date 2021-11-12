@@ -3,6 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 import ruptures as rpt
 
+from . import autoregression
 from .random_time_series import gen_rand
 
 
@@ -21,6 +22,16 @@ def fun():
     plt.ylabel('y')
     plt.title('Interesting Graph')
     plt.legend()
+    plt.show()
+
+
+def ar():
+    data_points, n_breakpoints, snr = 100, 5, 30
+    data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
+
+    _, result = autoregression.predict(data, n_breakpoints)
+
+    rpt.display(data, breakpoints, result)
     plt.show()
 
 
