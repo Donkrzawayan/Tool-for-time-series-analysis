@@ -39,8 +39,8 @@ def ruptures():
     data_points, n_breakpoints, snr = 100, 5, 30
     data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
 
-    algo = rpt.Pelt(model="rbf").fit(data)
-    result = algo.predict(pen=10)
+    algo = rpt.Dynp(min_size=1).fit(data)
+    result = algo.predict(n_breakpoints)
 
     rpt.display(data, breakpoints, result)
     plt.show()
