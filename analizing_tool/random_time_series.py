@@ -31,6 +31,6 @@ def gen_rand(n_data_points, n_change_points, snr, repeat=1):
 def _awgn(data, snr):
     """Additive white Gaussian noise"""
     snr = 10 ** (snr / 10.0)
-    xpower = np.sum(data ** 2) / len(data)
-    npower = xpower / snr
-    return np.random.randn(len(data)) * np.sqrt(npower)
+    x_power = np.sum(data ** 2) / len(data)
+    n_power = x_power / snr
+    return np.random.randn(len(data)) * np.sqrt(n_power)

@@ -25,9 +25,9 @@ def predict(data, k_gr):
         for kk in range(n - k_ster - 1):
             for jj in range(kk + 1, n - k_ster):
                 p_aux[jj] = _cost(data[kk:jj]) + p_opt_idx[jj]
-            ix0, ix1 = kk + 1, n - k_ster
-            min_index = np.argmin(p_aux[ix0:ix1])
-            mm = p_aux[ix0 + min_index]
+            ix_b, ix_e = kk + 1, n - k_ster
+            min_index = np.argmin(p_aux[ix_b:ix_e])
+            mm = p_aux[ix_b + min_index]
             p_opt_idx[kk] = mm
             opt_pals[k_ster, kk] = kk + min_index + 1
         q[k_ster] = p_opt_idx[0]
@@ -37,9 +37,7 @@ def predict(data, k_gr):
     for i in range(k_gr):
         opt_part[i, 0] = opt_pals[i, 0]
         for k_ster in range(i - 1, -1, -1):
-            y = opt_part[i, i - k_ster - 1]
-            temp = opt_pals[k_ster, y]
-            opt_part[i, i - k_ster] = temp
+            opt_part[i, i - k_ster] = opt_pals[k_ster, opt_part[i, i - k_ster - 1]]
 
     return q, opt_part[k_gr - 1]
 
