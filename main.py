@@ -8,6 +8,6 @@ if __name__ == '__main__':
     if len(argv) > 1:
         choice = argv[1]
     if choice == 1:
-        analizing_tool.ruptures()
+        analizing_tool.fun()
     else:
         pass

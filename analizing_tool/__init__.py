@@ -1,46 +1,36 @@
 import csv
 
-import matplotlib.pyplot as plt
+import numpy as np
 import ruptures as rpt
+from matplotlib import pyplot as plt
 
-from . import autoregression
-from .random_time_series import gen_rand
+from . import random_time_series as rts
+from . import search_methods
 
 
 def fun():
-    x = []
-    y = []
-
-    with open(r'datasets/rand_set.csv', 'r') as csvfile:
-        plots = csv.reader(csvfile, delimiter=';')
-        for row in plots:
-            x.append(row[0])
-            y.append(row[1])
-
-    plt.plot(x, y, label='Loaded from file!')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.title('Interesting Graph')
-    plt.legend()
-    plt.show()
-
-
-def ar():
     data_points, n_breakpoints, snr = 100, 5, 30
     data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
-
-    _, result = autoregression.predict(data, n_breakpoints)
-
+    data = csv_reading('datasets/Binance_ADAUSDT_d.csv', 3)
+    result = search_methods.nmr(data, n_breakpoints)
     rpt.display(data, breakpoints, result)
+
     plt.show()
 
 
-def ruptures():
-    data_points, n_breakpoints, snr = 100, 5, 30
-    data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
+def csv_reading(filename, n_row):
+    points = []
 
-    algo = rpt.Dynp(min_size=1).fit(data)
-    result = algo.predict(n_breakpoints)
+    with open(filename) as f:
+        reader = csv.reader(f)
+        header_row = next(reader)
 
-    rpt.display(data, breakpoints, result)
-    plt.show()
+        for row in reader:
+            point = float(row[n_row])
+            points.append(point)
+
+    return np.array(points)
+
+
+def gen_rand(data_points=100, n_breakpoints=5, snr=30):
+    return rts.gen_rand(data_points, n_breakpoints, snr)
