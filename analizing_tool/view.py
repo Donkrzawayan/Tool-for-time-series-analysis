@@ -3,6 +3,7 @@ import datetime
 import io
 
 import dash
+import numpy as np
 import pandas as pd
 import plotly.express as px
 from dash import dcc
@@ -82,7 +83,7 @@ def parse_contents(contents, filename, date):
         html.H5(filename),
         html.H6(datetime.datetime.fromtimestamp(date)),
 
-        fun(df['TOBS']),
+        fun(np.array(df['TOBS'])),
 
         html.Hr(),  # horizontal line
 
