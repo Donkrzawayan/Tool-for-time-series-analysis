@@ -1,8 +1,7 @@
 import csv
 
 import numpy as np
-import ruptures as rpt
-from matplotlib import pyplot as plt
+import plotly.express as px
 
 from . import random_time_series as rts
 from . import search_methods
@@ -11,11 +10,17 @@ from . import search_methods
 def fun():
     data_points, n_breakpoints, snr = 100, 5, 30
     data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
-    data = csv_reading('datasets/Binance_ADAUSDT_d.csv', 3)
+    data = csv_reading('datasets/weather_POLAND_ME_US.csv', 8)
     result = search_methods.nmr(data, n_breakpoints)
-    rpt.display(data, breakpoints, result)
+    # rpt.display(data, breakpoints, result)
 
-    plt.show()
+    fig = px.line(data, title='Tool for time series analysis')
+    for i in range(0, n_breakpoints, 2):
+        fig.add_vrect(breakpoints[i], breakpoints[i+1], line_width=0, fillcolor="red", opacity=0.15)
+    for breakpoint in result:
+        fig.add_vline(breakpoint)
+    fig.show()
+    # plt.show()
 
 
 def csv_reading(filename, n_row):
