@@ -11,7 +11,7 @@ def gen_rand(n_data_points, n_change_points, snr, repeat=1):
     offset = 10
     cp_range = range(offset, n_data_points - offset)
     change_points = np.sort(np.random.choice(cp_range, n_change_points, replace=False))
-    change_points = np.r_[1, change_points, n_data_points]  # 1 to first, n_data_points to last position
+    change_points = np.r_[0, change_points, n_data_points - 1]  # 0 to first, n_data_points - 1 to last position
     result = np.zeros((n_data_points - 1, repeat))
     segments = np.random.rand(repeat, n_change_points + 1)
 

@@ -1,3 +1,5 @@
-matplotlib
 numpy
 ruptures
+plotly
+dash
+pandas
