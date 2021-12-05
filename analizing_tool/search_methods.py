@@ -1,7 +1,6 @@
 import ruptures as rpt
 
-from . import autoregression
-from . import vempaliakhil96
+import autoregression
 
 
 def nmr(data, n_breakpoints):
@@ -9,9 +8,11 @@ def nmr(data, n_breakpoints):
     return result
 
 
-def ruptures(data, n_breakpoints):
-    algo = rpt.Dynp(min_size=1).fit(data)
-    return algo.predict(n_breakpoints)
+def ruptures_dynp(data, n_breakpoints):
+    algo = rpt.Dynp(model="l1", min_size=1).fit(data)
+    result = algo.predict(n_breakpoints)
+    result.pop()
+    return result
 
 
 def vempaliakhil(data, n_breakpoints):
