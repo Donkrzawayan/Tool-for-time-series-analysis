@@ -15,6 +15,8 @@ def ruptures_dynp(data, n_breakpoints):
     return result
 
 
-def vempaliakhil(data, n_breakpoints):
-    v = vempaliakhil96.cal_cost(data)
-    return vempaliakhil96.cal_tau(v, data, n_breakpoints + 1)
+def ruptures_binseg(data, n_breakpoints):
+    algo = rpt.Binseg(model="l1", min_size=1).fit(data)
+    result = algo.predict(n_breakpoints)
+    result.pop()
+    return result

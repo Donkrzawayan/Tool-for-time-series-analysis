@@ -17,17 +17,23 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
-def fun(data):
+def fun(data, method):
     n_breakpoints = 5
-    result = search_methods.nmr(data, n_breakpoints)
+    result = []
+    if method == 'NMR':
+        result = search_methods.nmr(data, n_breakpoints)
+    elif method == 'Dynp':
+        result = search_methods.ruptures_dynp(data, n_breakpoints)
+    else:
+        result = search_methods.ruptures_binseg(data, n_breakpoints)
     fig = px.line(data, title='Chart')
     for changepoint in result:
         fig.add_vline(changepoint)
 
     return dcc.Graph(
-            id='line-graph',
-            figure=fig
-        )
+        id='line-graph',
+        figure=fig
+    )
 
 
 app.layout = html.Div([
@@ -57,11 +63,22 @@ app.layout = html.Div([
         # Allow multiple files to be uploaded
         multiple=True
     ),
+
+    dcc.Dropdown(
+        id='dropdown',
+        options=[
+            {'label': 'Quality Control Procedure Based on Partitioning of NMR Time Series', 'value': 'NMR'},
+            {'label': 'ruptures Dynp', 'value': 'Dynp'},
+            {'label': 'ruptures Binseg', 'value': 'Binseg'}
+        ],
+        value='NMR'
+    ),
+
     html.Div(id='output-data-upload'),
 ])
 
 
-def parse_contents(contents, filename, date):
+def parse_contents(method, contents, filename, date):
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
@@ -83,7 +100,7 @@ def parse_contents(contents, filename, date):
         html.H5(filename),
         html.H6(datetime.datetime.fromtimestamp(date)),
 
-        fun(np.array(df['TOBS'])),
+        fun(np.array(df['TOBS']), method),
 
         html.Hr(),  # horizontal line
 
@@ -97,13 +114,14 @@ def parse_contents(contents, filename, date):
 
 
 @app.callback(Output('output-data-upload', 'children'),
+              Input('dropdown', 'value'),
               Input('upload-data', 'contents'),
               State('upload-data', 'filename'),
               State('upload-data', 'last_modified'))
-def update_output(list_of_contents, list_of_names, list_of_dates):
+def update_output(method, list_of_contents, list_of_names, list_of_dates):
     if list_of_contents is not None:
         children = [
-            parse_contents(c, n, d) for c, n, d in
+            parse_contents(method, c, n, d) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children
 
