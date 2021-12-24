@@ -19,16 +19,21 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 def fun(data, method):
     n_breakpoints = 5
-    result = []
-    if method == 'NMR':
-        result = search_methods.nmr(data, n_breakpoints)
-    elif method == 'Dynp':
-        result = search_methods.ruptures_dynp(data, n_breakpoints)
-    else:
-        result = search_methods.ruptures_binseg(data, n_breakpoints)
+
     fig = px.line(data, title='Chart')
-    for changepoint in result:
-        fig.add_vline(changepoint)
+
+    if 'NMR' in method:
+        result = search_methods.nmr(data, n_breakpoints)
+        for changepoint in result:
+            fig.add_vline(changepoint, line_color='black')
+    if 'Dynp' in method:
+        result = search_methods.ruptures_dynp(data, n_breakpoints)
+        for changepoint in result:
+            fig.add_vline(changepoint, line_color='green')
+    if 'Binseg' in method:
+        result = search_methods.ruptures_binseg(data, n_breakpoints)
+        for changepoint in result:
+            fig.add_vline(changepoint, line_color='blue')
 
     return dcc.Graph(
         id='line-graph',
@@ -48,7 +53,7 @@ app.layout = html.Div([
         id='upload-data',
         children=html.Div([
             'Drag and Drop or ',
-            html.A('Select File')
+            html.A('Select CSV File')
         ]),
         style={
             'width': '100%',
@@ -71,7 +76,8 @@ app.layout = html.Div([
             {'label': 'ruptures Dynp', 'value': 'Dynp'},
             {'label': 'ruptures Binseg', 'value': 'Binseg'}
         ],
-        value='NMR'
+        value=['NMR'],
+        multi=True
     ),
 
     html.Div(id='output-data-upload'),
@@ -127,4 +133,4 @@ def update_output(method, list_of_contents, list_of_names, list_of_dates):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
