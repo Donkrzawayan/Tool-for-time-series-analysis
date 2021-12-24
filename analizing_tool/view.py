@@ -106,7 +106,7 @@ def parse_contents(method, contents, filename, date):
         html.H5(filename),
         html.H6(datetime.datetime.fromtimestamp(date)),
 
-        fun(np.array(df['TOBS']), method),
+        fun(np.array(df.iloc[:, 8]), method),
 
         html.Hr(),  # horizontal line
 
