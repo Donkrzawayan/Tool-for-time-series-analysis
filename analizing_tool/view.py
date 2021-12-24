@@ -11,6 +11,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 
 import search_methods
+import random_time_series as rts
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -123,6 +124,20 @@ def parse_contents(method, csv_index, contents, filename, date):
     ])
 
 
+def parse_random(method):
+    data_points, n_breakpoints, snr = 100, 5, 30
+    df, breakpoints = rts.gen_rand(data_points, n_breakpoints, snr)
+
+    return html.Div([
+        html.H5('Random data'),
+        html.H6(datetime.datetime.now()),
+
+        fun(np.array(df), method),
+
+        html.Hr(),  # horizontal line
+    ])
+
+
 @app.callback(Output('output-data-upload', 'children'),
               Input('dropdown', 'value'),
               Input('csv_index', 'value'),
@@ -135,6 +150,8 @@ def update_output(method, csv_index, list_of_contents, list_of_names, list_of_da
             parse_contents(method, csv_index, c, n, d) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children
+    else:
+        return [parse_random(method)]
 
 
 if __name__ == '__main__':
