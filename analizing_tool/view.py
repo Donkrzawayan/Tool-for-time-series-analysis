@@ -68,6 +68,15 @@ app.layout = html.Div([
         # Allow multiple files to be uploaded
         multiple=True
     ),
+    html.Div([
+        html.Label(
+            'Enter column index: ',
+            style={
+                'display': 'inline-block',
+                'marginRight': 10
+            }),
+        dcc.Input(id='csv_index', type='number', min=0),
+    ], style={'textAlign': 'center'}),
 
     dcc.Dropdown(
         id='dropdown',
@@ -84,7 +93,7 @@ app.layout = html.Div([
 ])
 
 
-def parse_contents(method, contents, filename, date):
+def parse_contents(method, csv_index, contents, filename, date):
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
@@ -102,32 +111,28 @@ def parse_contents(method, contents, filename, date):
             'There was an error processing this file.'
         ])
 
+    csv_index = 0 if csv_index is None else csv_index
+
     return html.Div([
         html.H5(filename),
         html.H6(datetime.datetime.fromtimestamp(date)),
 
-        fun(np.array(df.iloc[:, 8]), method),
+        fun(np.array(df.iloc[:, csv_index]), method),
 
         html.Hr(),  # horizontal line
-
-        # For debugging, display the raw contents provided by the web browser
-        html.Div('Raw Content'),
-        html.Pre(contents[0:200] + '...', style={
-            'whiteSpace': 'pre-wrap',
-            'wordBreak': 'break-all'
-        })
     ])
 
 
 @app.callback(Output('output-data-upload', 'children'),
               Input('dropdown', 'value'),
+              Input('csv_index', 'value'),
               Input('upload-data', 'contents'),
               State('upload-data', 'filename'),
               State('upload-data', 'last_modified'))
-def update_output(method, list_of_contents, list_of_names, list_of_dates):
+def update_output(method, csv_index, list_of_contents, list_of_names, list_of_dates):
     if list_of_contents is not None:
         children = [
-            parse_contents(method, c, n, d) for c, n, d in
+            parse_contents(method, csv_index, c, n, d) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children
 
