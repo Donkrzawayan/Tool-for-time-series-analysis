@@ -21,21 +21,25 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 def fun(data, method):
     n_breakpoints = 5
 
-    fig = px.line(data, title='Chart')
+    fig = px.line(data)
 
     if 'NMR' in method:
         result = search_methods.nmr(data, n_breakpoints)
         for changepoint in result:
-            fig.add_vline(changepoint, line_color='black')
+            fig.add_vline(changepoint, line_color='black', annotation_text='NMR')
+            fig.update_layout(  # annotation in the middle
+                annotations=[{**a, **{"y": .5}} for a in fig.to_dict()["layout"]["annotations"]]
+            )
     if 'Dynp' in method:
         result = search_methods.ruptures_dynp(data, n_breakpoints)
         for changepoint in result:
-            fig.add_vline(changepoint, line_color='green')
+            fig.add_vline(changepoint, line_color='green', annotation_text='Dynp', annotation_position='top right')
     if 'Binseg' in method:
         result = search_methods.ruptures_binseg(data, n_breakpoints)
         for changepoint in result:
-            fig.add_vline(changepoint, line_color='blue')
+            fig.add_vline(changepoint, line_color='blue', annotation_text='Binseg', annotation_position='bottom right')
 
+    fig.update_layout(showlegend=False)
     return dcc.Graph(
         id='line-graph',
         figure=fig
