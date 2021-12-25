@@ -18,7 +18,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
-def fun(data, method):
+def fun(data, method, breakpoints=None):
     n_breakpoints = 5
 
     fig = px.line(data)
@@ -38,6 +38,10 @@ def fun(data, method):
         result = search_methods.ruptures_binseg(data, n_breakpoints)
         for changepoint in result:
             fig.add_vline(changepoint, line_color='blue', annotation_text='Binseg', annotation_position='bottom right')
+
+    if breakpoints is not None:
+        for i in range(0, n_breakpoints + 1, 2):
+            fig.add_vrect(breakpoints[i], breakpoints[i + 1], line_width=0, fillcolor="red", opacity=0.15)
 
     fig.update_layout(showlegend=False)
     return dcc.Graph(
@@ -136,7 +140,7 @@ def parse_random(method):
         html.H5('Random data'),
         html.H6(datetime.datetime.now()),
 
-        fun(np.array(df), method),
+        fun(np.array(df), method, breakpoints),
 
         html.Hr(),  # horizontal line
     ])
