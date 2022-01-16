@@ -1,6 +1,6 @@
 import ruptures as rpt
 
-import autoregression
+from . import autoregression
 
 
 def nmr(data, n_breakpoints):

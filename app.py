@@ -10,8 +10,8 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
 
-import search_methods
-import random_time_series as rts
+from analizing_tool import search_methods
+from analizing_tool import random_time_series as rts
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
