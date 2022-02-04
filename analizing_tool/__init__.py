@@ -9,7 +9,7 @@ from . import search_methods
 
 def fun():
     data_points, n_breakpoints, snr = 100, 5, 30
-    data, breakpoints = gen_rand(data_points, n_breakpoints, snr)
+    data, breakpoints = rts.gen_rand(data_points, n_breakpoints, snr)
     data = csv_reading('datasets/weather_POLAND_ME_US.csv', 8)
     result = search_methods.nmr(data, n_breakpoints)
     # rpt.display(data, breakpoints, result)
@@ -35,7 +35,3 @@ def csv_reading(filename, n_row):
             points.append(point)
 
     return np.array(points)
-
-
-def gen_rand(data_points=100, n_breakpoints=5, snr=30):
-    return rts.gen_rand(data_points, n_breakpoints, snr)
