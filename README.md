@@ -10,7 +10,7 @@ This tool is equipped with two general-purpose methods, the first uses the dynam
 
 ## References
 Quality control procedure based on partitioning of NMR time series:
-> - Michał Staniszewski, Agnieszka Skorupa, Łukasz Boguszewicz, Maria Sokół, Andrzej Polański. Quality control procedure based on partitioning of nmr time series. Sensors, 18(3), 2018.
+> - Michał Staniszewski, Agnieszka Skorupa, Łukasz Boguszewicz, Maria Sokół, Andrzej Polański. Quality control procedure based on partitioning of nmr time series. *Sensors*, 18(3), 2018.
 
 ruptures Dynp, Binseg:
-> - Charles Truong, Laurent Oudre, Nicolas Vayatis. Selective review of offline change point detection methods. Signal Processing, 167:107299, 2020.
+> - Charles Truong, Laurent Oudre, Nicolas Vayatis. Selective review of offline change point detection methods. *Signal Processing*, 167:107299, 2020.
